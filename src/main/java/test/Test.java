@@ -11,6 +11,11 @@ import java.util.HashMap;
 public class Test {
 
     public static void main(String[] args) {
+        json();
+        kryo();
+    }
+
+    private static void json() {
         String path = "CustomBuffDataDTO.json";
         CustomBuffDataDTO dto = new CustomBuffDataDTO();
         dto.isItem = true;
