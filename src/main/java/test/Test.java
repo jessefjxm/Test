@@ -2,6 +2,7 @@ package test;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
+import org.bms.common.RmiVerifyClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +12,7 @@ import java.util.HashMap;
 public class Test {
 
     public static void main(String[] args) {
-        json();
-        kryo();
+        RmiVerifyClient.初始化登录();
     }
 
     private static void json() {

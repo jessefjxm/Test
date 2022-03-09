@@ -1,0 +1,6 @@
+org\bms\common\验证机房地址.class
+org\bms\common\RmiVerifyClient$RmiVerifyInterface.class
+org\bms\common\RmiVerifyClient.class
+org\bms\common\RmiVerifyInnerClient.class
+org\bms\verify\rmi\IManageService.class
+org\bms\verify\rmi\IVerifyService.class

@@ -1,2 +1,5 @@
 [
+  {
+    "interfaces":["java.rmi.Remote","org.bms.verify.rmi.IVerifyService"]}
+  
 ]
