@@ -1,5 +1,13 @@
 [
 {
+  "name":"com.alibaba.fastjson.parser.deserializer.FastjsonASMDeserializer_1_CustomBuffDataDTO",
+  "methods":[{"name":"<init>","parameterTypes":["com.alibaba.fastjson.parser.ParserConfig","com.alibaba.fastjson.util.JavaBeanInfo"] }]}
+,
+{
+  "name":"com.alibaba.fastjson.serializer.ASMSerializer_1_CustomBuffDataDTO",
+  "methods":[{"name":"<init>","parameterTypes":["com.alibaba.fastjson.serializer.SerializeBeanInfo"] }]}
+,
+{
   "name":"com.esotericsoftware.kryo.serializers.MapSerializer",
   "methods":[{"name":"<init>","parameterTypes":[] }]}
 ,
@@ -8,12 +16,21 @@
   "fields":[{"name":"unsafe"}]}
 ,
 {
+  "name":"java.lang.AutoCloseable"}
+,
+{
   "name":"java.lang.ClassLoader",
   "methods":[{"name":"defineClass","parameterTypes":["java.lang.String","byte[]","int","int","java.security.ProtectionDomain"] }]}
 ,
 {
   "name":"java.nio.DirectByteBuffer",
   "queriedMethods":[{"name":"<init>","parameterTypes":["long","int","java.lang.Object"] }]}
+,
+{
+  "name":"java.nio.file.Path"}
+,
+{
+  "name":"java.sql.Clob"}
 ,
 {
   "name":"java.time.Duration"}
@@ -58,6 +75,9 @@
   "name":"java.time.ZonedDateTime"}
 ,
 {
+  "name":"java.util.Deque"}
+,
+{
   "name":"java.util.EnumMap",
   "fields":[{"name":"keyType"}]}
 ,
@@ -77,8 +97,14 @@
   "name":"java.util.OptionalLong"}
 ,
 {
+  "name":"javax.xml.bind.annotation.XmlAccessorType"}
+,
+{
   "name":"jdk.vm.ci.services.Services",
   "methods":[{"name":"load","parameterTypes":["java.lang.Class"] }]}
+,
+{
+  "name":"kotlin.Metadata"}
 ,
 {
   "name":"sun.misc.Cleaner",
@@ -91,6 +117,13 @@
 {
   "name":"sun.nio.ch.DirectBuffer",
   "queriedMethods":[{"name":"cleaner","parameterTypes":[] }]}
+,
+{
+  "name":"test.CustomBuffDataDTO",
+  "allDeclaredFields":true,
+  "allPublicFields":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true}
 ,
 {
   "name":"test.SerializedName",
