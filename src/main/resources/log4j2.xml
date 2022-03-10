@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--status:Log4j2内部日志的输出级别,设置为TRACE对学习Log4j2非常有用 -->
+<!--monitorInterval:定时检测配置文件的修改,有变化则自动重新加载配置,时间单位为秒,最小间隔为5s -->
+<Configuration status="WARN" monitorInterval="600">
+    <!--properties:设置全局变量 -->
+    <properties>
+        <!--LOG_HOME:指定当前日志存放的目录 -->
+        <property name="LOG_HOME">日志</property>
+    </properties>
+
+    <!--Appenders:定义日志输出目的地，内容和格式等 -->
+    <Appenders>
+        <!--Console:日志输出到控制台标准输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--pattern:日期,线程名,日志级别,日志名称,日志信息,换行 -->
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+        </Console>
+
+        <!--RollingFile:日志输出到文件,下面的文件都使用相对路径 -->
+        <!--fileName:当前日志输出的文件名称 -->
+        <!--filePattern:备份日志文件名称，备份目录为logs下面以年月命名的目录，备份时使用gz格式压缩 -->
+
+        <!--基础日志 -->
+        <RollingFile name="日志_全部" fileName="${LOG_HOME}/日志_全部.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_全部-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <!--Policies:触发策略决定何时执行备份 -->
+            <Policies>
+                <!--TimeBasedTriggeringPolicy:日志文件按照时间备份 -->
+                <!--interval:每1天生成一个新文件，时间单位需要结合filePattern时间%d{yyyy-MM-dd} -->
+                <!--同理，如果要每1小时生成一个新文件，则改成%d{yyyy-MM-ddHH} -->
+                <!--modulate:对备份日志的生成时间纠偏，纠偏以0为基准进行，"0+interval"决定启动后第一次备份时间 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!--SizeBasedTriggeringPolicy:日志文件按照大小备份 -->
+                <!--size:指定日志文件最大为100MB，单位可以为KB、MB或GB -->
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!--DefaultRolloverStrategy:翻转策略决定如何执行备份 -->
+            <!--max:最多保存5个备份文件，结合时间使用后，在每个时间段内最多有5个备份，多出来的会被覆盖 -->
+            <!--compressionLevel:配置日志压缩级别，范围0-9，0不压缩，1压缩速度最快，9压缩率最好，目前只对于zip压缩文件类型有效 -->
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <!--Delete:删除匹配到的过期备份文件 -->
+                <!--maxDepth:由于备份文件保存在${LOG_HOME}/$${date:yyyy-MM},所以目录深度设置为2 -->
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <!--IfFileName:匹配文件名称 -->
+                    <!--glob:匹配2级目录深度下的以.log.gz结尾的备份文件 -->
+                    <IfFileName glob="*/*.log.gz"/>
+                    <!--IfLastModified:匹配文件修改时间 -->
+                    <!--age:匹配超过180天的文件，单位D、H、M、S分别表示天、小时、分钟、秒-->
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_全部_async" includeLocation="true">
+            <AppenderRef ref="日志_全部"/>
+        </Async>
+        <RollingFile name="日志_错误" fileName="${LOG_HOME}/日志_错误.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_错误-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_错误_async" includeLocation="true">
+            <AppenderRef ref="日志_错误"/>
+        </Async>
+        <RollingFile name="日志_警告" fileName="${LOG_HOME}/日志_警告.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_警告-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_警告_async" includeLocation="true">
+            <AppenderRef ref="日志_警告"/>
+        </Async>
+        <RollingFile name="日志_信息" fileName="${LOG_HOME}/日志_信息.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_信息-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_信息_async" includeLocation="true">
+            <AppenderRef ref="日志_信息"/>
+        </Async>
+        <RollingFile name="日志_调试" fileName="${LOG_HOME}/日志_调试.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_调试-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%t|%p|%c|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_调试_async" includeLocation="true">
+            <AppenderRef ref="日志_调试"/>
+        </Async>
+        <RollingFile name="日志_封包" fileName="${LOG_HOME}/日志_封包.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/日志_封包-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%t|%p|%c|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="日志_封包_async" includeLocation="true">
+            <AppenderRef ref="日志_封包"/>
+        </Async>
+
+        <!--战斗记录，用于反作弊，目前没有实装 -->
+        <RollingFile name="近战_攻击" fileName="${LOG_HOME}/近战_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/近战_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="近战_攻击_async" includeLocation="true">
+            <AppenderRef ref="近战_攻击"/>
+        </Async>
+        <RollingFile name="远程_攻击" fileName="${LOG_HOME}/远程_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/远程_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="远程_攻击_async" includeLocation="true">
+            <AppenderRef ref="远程_攻击"/>
+        </Async>
+        <RollingFile name="魔法_攻击" fileName="${LOG_HOME}/魔法_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/魔法_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="魔法_攻击_async" includeLocation="true">
+            <AppenderRef ref="魔法_攻击"/>
+        </Async>
+        <RollingFile name="被动_攻击" fileName="${LOG_HOME}/被动_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/被动_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="被动_攻击_async" includeLocation="true">
+            <AppenderRef ref="被动_攻击"/>
+        </Async>
+        <RollingFile name="终极_攻击" fileName="${LOG_HOME}/终极_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/终极_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="终极_攻击_async" includeLocation="true">
+            <AppenderRef ref="终极_攻击"/>
+        </Async>
+        <RollingFile name="寒冰步_攻击" fileName="${LOG_HOME}/寒冰步_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/寒冰步_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="寒冰步_攻击_async" includeLocation="true">
+            <AppenderRef ref="寒冰步_攻击"/>
+        </Async>
+        <RollingFile name="召唤兽_攻击" fileName="${LOG_HOME}/召唤兽_攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/召唤兽_攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="召唤兽_攻击_async" includeLocation="true">
+            <AppenderRef ref="召唤兽_攻击"/>
+        </Async>
+        <RollingFile name="区域持续攻击" fileName="${LOG_HOME}/区域持续攻击.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/区域持续攻击-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="区域持续攻击_async" includeLocation="true">
+            <AppenderRef ref="区域持续攻击"/>
+        </Async>
+
+        <RollingFile name="角色受伤" fileName="${LOG_HOME}/角色受伤.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/角色受伤-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="角色受伤_async" includeLocation="true">
+            <AppenderRef ref="角色受伤"/>
+        </Async>
+        <RollingFile name="怪物_移动" fileName="${LOG_HOME}/怪物_移动.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/怪物_移动-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="怪物_移动_async" includeLocation="true">
+            <AppenderRef ref="怪物_移动"/>
+        </Async>
+        <RollingFile name="移动_错误" fileName="${LOG_HOME}/移动_错误.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/移动_错误-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="移动_错误_async" includeLocation="true">
+            <AppenderRef ref="移动_错误"/>
+        </Async>
+        <RollingFile name="数据包_异常" fileName="${LOG_HOME}/数据包_异常.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/数据包_异常-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="数据包_异常_async" includeLocation="true">
+            <AppenderRef ref="数据包_异常"/>
+        </Async>
+        <RollingFile name="客户端_错误" fileName="${LOG_HOME}/客户端_错误.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/客户端_错误-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="客户端_错误_async" includeLocation="true">
+            <AppenderRef ref="客户端_错误"/>
+        </Async>
+        <RollingFile name="客户端_错误反馈" fileName="${LOG_HOME}/客户端_错误反馈.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/客户端_错误反馈-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="客户端_错误反馈_async" includeLocation="true">
+            <AppenderRef ref="客户端_错误反馈"/>
+        </Async>
+        <RollingFile name="脚本_异常" fileName="${LOG_HOME}/脚本_异常.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/脚本_异常-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="脚本_异常_async" includeLocation="true">
+            <AppenderRef ref="脚本_异常"/>
+        </Async>
+        <RollingFile name="数据包_收发" fileName="${LOG_HOME}/数据包_收发.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/数据包_收发-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="数据包_收发_async" includeLocation="true">
+            <AppenderRef ref="数据包_收发"/>
+        </Async>
+        <RollingFile name="在线统计" fileName="${LOG_HOME}/在线统计.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/在线统计-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="在线统计_async" includeLocation="true">
+            <AppenderRef ref="在线统计"/>
+        </Async>
+        <RollingFile name="监控日志" fileName="${LOG_HOME}/监控日志.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="监控日志_async" includeLocation="true">
+            <AppenderRef ref="监控日志"/>
+        </Async>
+        <RollingFile name="登陆日志" fileName="${LOG_HOME}/登陆日志.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="登陆日志_async" includeLocation="true">
+            <AppenderRef ref="登陆日志"/>
+        </Async>
+        <RollingFile name="指令日志" fileName="${LOG_HOME}/指令日志.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="指令日志_async" includeLocation="true">
+            <AppenderRef ref="指令日志"/>
+        </Async>
+
+        <!--各类聊天记录，主要用于多人联机 -->
+        <RollingFile name="交易聊天" fileName="${LOG_HOME}/交易聊天.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="交易聊天_async" includeLocation="true">
+            <AppenderRef ref="交易聊天"/>
+        </Async>
+        <RollingFile name="账号注册" fileName="${LOG_HOME}/账号注册.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="账号注册_async" includeLocation="true">
+            <AppenderRef ref="账号注册"/>
+        </Async>
+        <RollingFile name="联盟" fileName="${LOG_HOME}/联盟.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="联盟_async" includeLocation="true">
+            <AppenderRef ref="联盟"/>
+        </Async>
+        <RollingFile name="队伍" fileName="${LOG_HOME}/队伍.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="队伍_async" includeLocation="true">
+            <AppenderRef ref="队伍"/>
+        </Async>
+        <RollingFile name="公会" fileName="${LOG_HOME}/公会.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="公会_async" includeLocation="true">
+            <AppenderRef ref="公会"/>
+        </Async>
+        <RollingFile name="好友" fileName="${LOG_HOME}/好友.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="好友_async" includeLocation="true">
+            <AppenderRef ref="好友"/>
+        </Async>
+        <RollingFile name="悄悄话" fileName="${LOG_HOME}/悄悄话.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="悄悄话_async" includeLocation="true">
+            <AppenderRef ref="悄悄话"/>
+        </Async>
+        <RollingFile name="远征队" fileName="${LOG_HOME}/远征队.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="远征队_async" includeLocation="true">
+            <AppenderRef ref="远征队"/>
+        </Async>
+        <RollingFile name="普通聊天" fileName="${LOG_HOME}/普通聊天.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/监控日志-%d{yyyy-MM-dd}-%i.log.gz"
+                     createOnDemand="true">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" compressionLevel="1">
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log.gz"/>
+                    <IfLastModified age="180D"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        <Async name="普通聊天_async" includeLocation="true">
+            <AppenderRef ref="普通聊天"/>
+        </Async>
+    </Appenders>
+
+    <!--Loggers:定义日志级别和使用的Appenders -->
+    <Loggers>
+        <!--name: 打印日志的类的包路径 -->
+        <!--additivity: true当前的Logger打印的日志附加到Root，false仅仅打印到RollingFile -->
+        <!--Root:日志默认打印到控制台 -->
+        <!--level日志级别: ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF -->
+        <root level="ERROR">
+            <appender-ref ref="Console"/>
+        </root>
+
+        <Logger name="日志_全部" level="INFO" additivity="false">
+            <AppenderRef ref="日志_全部_async"/>
+        </Logger>
+        <Logger name="日志_错误" level="INFO" additivity="false">
+            <AppenderRef ref="日志_错误_async"/>
+        </Logger>
+        <Logger name="日志_警告" level="INFO" additivity="false">
+            <AppenderRef ref="日志_警告_async"/>
+        </Logger>
+        <Logger name="日志_信息" level="INFO" additivity="false">
+            <AppenderRef ref="日志_信息_async"/>
+        </Logger>
+        <Logger name="日志_调试" level="DEBUG" additivity="false">
+            <AppenderRef ref="日志_调试_async"/>
+        </Logger>
+        <Logger name="日志_封包" level="DEBUG" additivity="false">
+            <AppenderRef ref="日志_封包_async"/>
+        </Logger>
+
+        <Logger name="近战_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="近战_攻击_async"/>
+        </Logger>
+        <Logger name="远程_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="远程_攻击_async"/>
+        </Logger>
+        <Logger name="魔法_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="魔法_攻击_async"/>
+        </Logger>
+        <Logger name="被动_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="被动_攻击_async"/>
+        </Logger>
+        <Logger name="终极_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="终极_攻击_async"/>
+        </Logger>
+        <Logger name="寒冰步_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="寒冰步_攻击_async"/>
+        </Logger>
+        <Logger name="召唤兽_攻击" level="INFO" additivity="false">
+            <AppenderRef ref="召唤兽_攻击_async"/>
+        </Logger>
+        <Logger name="区域持续攻击" level="INFO" additivity="false">
+            <AppenderRef ref="区域持续攻击_async"/>
+        </Logger>
+
+        <Logger name="角色受伤" level="INFO" additivity="false">
+            <AppenderRef ref="角色受伤_async"/>
+        </Logger>
+        <Logger name="怪物_移动" level="INFO" additivity="false">
+            <AppenderRef ref="怪物_移动_async"/>
+        </Logger>
+        <Logger name="移动_错误" level="INFO" additivity="false">
+            <AppenderRef ref="移动_错误_async"/>
+        </Logger>
+        <Logger name="数据包_异常" level="INFO" additivity="false">
+            <AppenderRef ref="数据包_异常_async"/>
+        </Logger>
+        <Logger name="客户端_错误" level="INFO" additivity="false">
+            <AppenderRef ref="客户端_错误_async"/>
+        </Logger>
+        <Logger name="客户端_错误反馈" level="INFO" additivity="false">
+            <AppenderRef ref="客户端_错误反馈_async"/>
+        </Logger>
+        <Logger name="脚本_异常" level="INFO" additivity="false">
+            <AppenderRef ref="脚本_异常_async"/>
+        </Logger>
+        <Logger name="数据包_收发" level="INFO" additivity="false">
+            <AppenderRef ref="数据包_收发_async"/>
+        </Logger>
+        <Logger name="在线统计" level="INFO" additivity="false">
+            <AppenderRef ref="在线统计_async"/>
+        </Logger>
+        <Logger name="监控日志" level="INFO" additivity="false">
+            <AppenderRef ref="监控日志_async"/>
+        </Logger>
+        <Logger name="账号注册" level="INFO" additivity="false">
+            <AppenderRef ref="账号注册_async"/>
+        </Logger>
+        <Logger name="登陆日志" level="INFO" additivity="false">
+            <AppenderRef ref="登陆日志_async"/>
+        </Logger>
+        <Logger name="指令日志" level="INFO" additivity="false">
+            <AppenderRef ref="指令日志_async"/>
+        </Logger>
+
+        <Logger name="普通聊天" level="INFO" additivity="false">
+            <AppenderRef ref="普通聊天_async"/>
+        </Logger>
+        <Logger name="好友" level="INFO" additivity="false">
+            <AppenderRef ref="好友_async"/>
+        </Logger>
+        <Logger name="队伍" level="INFO" additivity="false">
+            <AppenderRef ref="队伍_async"/>
+        </Logger>
+        <Logger name="公会" level="INFO" additivity="false">
+            <AppenderRef ref="公会_async"/>
+        </Logger>
+        <Logger name="联盟" level="INFO" additivity="false">
+            <AppenderRef ref="联盟_async"/>
+        </Logger>
+        <Logger name="远征队" level="INFO" additivity="false">
+            <AppenderRef ref="远征队_async"/>
+        </Logger>
+        <Logger name="悄悄话" level="INFO" additivity="false">
+            <AppenderRef ref="悄悄话_async"/>
+        </Logger>
+        <Logger name="交易聊天" level="INFO" additivity="false">
+            <AppenderRef ref="交易聊天_async"/>
+        </Logger>
+    </Loggers>
+</Configuration>

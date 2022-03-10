@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
 import org.bms.common.RmiVerifyClient;
 
+import javax.swing.JButton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +13,15 @@ import java.util.HashMap;
 public class Test {
 
     public static void main(String[] args) {
+        new Test().icon();
+    }
+
+    private void icon() {
+        javax.swing.JButton jButton_更多功能设置 = new JButton();
+        jButton_更多功能设置.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/更多设置.png"))); // NOI18N
+    }
+
+    private static void rmi() {
         RmiVerifyClient.初始化登录();
     }
 

@@ -2,6 +2,9 @@
   "resources":{
   "includes":[
     {
+      "pattern":"\\QImage/更多设置.png\\E"
+    }, 
+    {
       "pattern":"\\QMETA-INF/services/com.oracle.truffle.api.TruffleLanguage$Provider\\E"
     }, 
     {
@@ -44,11 +47,24 @@
       "pattern":"\\QMETA-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl\\E"
     }, 
     {
+      "pattern":"\\QMETA-INF/services/sun.java2d.pipe.RenderingEngine\\E"
+    }, 
+    {
       "pattern":"\\Qcom/oracle/truffle/nfi/backend/libffi/LibFFILanguage.class\\E"
     }, 
     {
       "pattern":"\\Qtest\\E"
     }
   ]},
-  "bundles":[]
+  "bundles":[
+    {
+      "name":"com.sun.swing.internal.plaf.basic.resources.basic"
+    }, 
+    {
+      "name":"com.sun.swing.internal.plaf.metal.resources.metal"
+    }, 
+    {
+      "name":"sun.awt.resources.awt"
+    }
+  ]
 }
