@@ -13,6 +13,7 @@
 
                 <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                     <Pattern>%d{yyyy-MM-dd HH:mm:ss}|%thread|%level|%msg%n</Pattern>
+                    <charset>UTF-8</charset>
                 </encoder>
 
                 <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">

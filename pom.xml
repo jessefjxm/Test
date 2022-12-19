@@ -14,13 +14,43 @@
         <graalvm.version>21.3.1</graalvm.version>
     </properties>
 
+    <groupId>bms.server</groupId>
+    <artifactId>bms.server</artifactId>
+    <version>2021.12</version>
+    <name>BMS冒险世界·TMS</name>
+    <url>https://gitee.com/bmsmxd/src166</url>
+
+    <!-- 补充仓库 -->
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <!-- 依赖列表 -->
     <dependencies>
+        <!--字符繁体简体转换-->
+        <!-- https://mvnrepository.com/artifact/com.github.stuxuhai/jpinyin -->
+        <dependency>
+            <groupId>com.github.stuxuhai</groupId>
+            <artifactId>jpinyin</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>5.2.8.RELEASE</version>
+            <version>5.3.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
@@ -30,54 +60,40 @@
             <version>30.1-jre</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.73</version>
+            <version>1.2.75</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.8.1</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.esotericsoftware/kryo -->
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
-            <version>5.0.0-RC8</version>
+            <version>5.0.3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.yahoo.platform.yui/yuicompressor -->
-        <dependency>
-            <groupId>com.yahoo.platform.yui</groupId>
-            <artifactId>yuicompressor</artifactId>
-            <version>2.4.8</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
+        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.1.0</version>
+            <version>3.4.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
@@ -86,27 +102,14 @@
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>3.0.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.jtattoo/JTattoo -->
-        <dependency>
-            <groupId>com.jtattoo</groupId>
-            <artifactId>JTattoo</artifactId>
-            <version>1.6.13</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-            <version>2.8.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.mchange/mchange-commons-java -->
-        <dependency>
-            <groupId>com.mchange</groupId>
-            <artifactId>mchange-commons-java</artifactId>
-            <version>0.2.20</version>
+            <version>2.9.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
@@ -114,6 +117,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.49</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.58.Final</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -127,14 +137,21 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.7</version>
+            <version>3.7.2</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.7</version>
+            <version>2.8.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-invoker -->
@@ -142,37 +159,164 @@
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
             <version>3.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
             <version>${graalvm.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
             <version>${graalvm.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jb2011</groupId>
+            <artifactId>beautyeye</artifactId>
+            <version>lnf</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/beautyeye-lnf.jar</systemPath>
+        </dependency>
     </dependencies>
 
-    <groupId>org.example</groupId>
-    <artifactId>Test</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <profiles>
+        <profile>
+            <id>至尊版</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <package.environment>至尊版</package.environment>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/IManageService.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <copy overwrite="true" file="${project.basedir}/target/bms.server.jar" tofile="${project.basedir}/输出服务端文件/至尊版/bms.server.jar"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>收货版</id>
+            <properties>
+                <package.environment>收货版</package.environment>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/IManageService.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <copy overwrite="true" file="${project.basedir}/target/bms.server.jar" tofile="${project.basedir}/输出服务端文件/收货版/bms.server.jar"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
+        <finalName>bms.server.debug</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>*.zkm</exclude>
+                    <exclude>*.txt</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>注入依赖库 beautyeye</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <generatePom>true</generatePom>
+                            <groupId>org.jb2011</groupId>
+                            <artifactId>beautyeye</artifactId>
+                            <version>lnf</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/beautyeye-lnf.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -180,10 +324,13 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
+                    <excludes>
+                        <exclude>**/org/bms/dev/**</exclude>
+                    </excludes>
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
                         <manifest>
-                            <mainClass>test.Test</mainClass>
+                            <mainClass>org.bms.BMS</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <!-- 将classpath信息加入生成的jar中 -->
                             <addClasspath>true</addClasspath>
@@ -192,6 +339,9 @@
                             <!-- 指定依赖jar包的目录前缀 -->
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>lib/beautyeye-lnf.jar</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -202,14 +352,29 @@
                 <version>3.1.2</version>
                 <executions>
                     <execution>
-                        <id>复制依赖库</id>
+                        <id>复制依赖库-1</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/lib</outputDirectory>
-                            <excludeGroupIds>org.projectlombok,com.yahoo.platform.yui,com.github.javaparser,org.apache.maven.shared,com.jcraft</excludeGroupIds>
+                            <excludeGroupIds>org.projectlombok,com.yahoo.platform.yui,com.github.javaparser,org.apache.maven.shared,com.jcraft,org.graalvm.js</excludeGroupIds>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>复制依赖库-2</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/lib</outputDirectory>
+                            <includeGroupIds>org.graalvm.js</includeGroupIds>
+                            <includeArtifactIds>js-scriptengine</includeArtifactIds>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -218,7 +383,85 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>复制ZKM默认配置文件到根目录，避免找不到</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <copy file="${project.basedir}/src/main/resources/defaultExclude.txt" tofile="${project.basedir}/defaultExclude.txt"/>
+                                <copy file="${project.basedir}/src/main/resources/defaultTrimExclude.txt" tofile="${project.basedir}/defaultTrimExclude.txt"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>ZKM 混淆[1] 主体混淆</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-DZKM_SCRIPT_ENCODING=UTF-8</argument>
+                                <argument>-DZKM_NEW_CHANGE_LOG_ENCODING=UTF-8</argument>
+                                <argument>-DZKM_JAD_ENCODING=UTF-8</argument>
+                                <argument>-jar</argument>
+                                <argument>${basedir}/lib/ZKM.jar</argument>
+                                <argument>${basedir}/src/main/resources/zkm.step1.txt</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Virbox虚拟化</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>virboxprotector_con</executable>
+                            <arguments>
+                                <argument>${basedir}/target/bms.server.tmp.jar</argument>
+                                <argument>-o</argument>
+                                <argument>${basedir}/target/bms.server.ssp.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>ZKM 混淆[2] 补全混淆</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-DZKM_SCRIPT_ENCODING=UTF-8</argument>
+                                <argument>-DZKM_NEW_CHANGE_LOG_ENCODING=UTF-8</argument>
+                                <argument>-DZKM_JAD_ENCODING=UTF-8</argument>
+                                <argument>-jar</argument>
+                                <argument>${basedir}/lib/ZKM.jar</argument>
+                                <argument>${basedir}/src/main/resources/zkm.step2.txt</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
 </project>
